@@ -8,7 +8,6 @@
 #define AMX_DEFINE_NATIVE(native) \
 	{#native, Native::native},
 
-
 namespace Native
 {
 	//ORM natives
@@ -34,32 +33,30 @@ namespace Native
 	AMX_DECLARE_NATIVE(orm_delvar);
 	AMX_DECLARE_NATIVE(orm_setkey);
 
-
 	//MySQL natives
-	AMX_DECLARE_NATIVE(mysql_connect);
-	AMX_DECLARE_NATIVE(mysql_connect_file);
-	AMX_DECLARE_NATIVE(mysql_close);
+	AMX_DECLARE_NATIVE(sql_connect);
+	AMX_DECLARE_NATIVE(sql_connect_file);
+	AMX_DECLARE_NATIVE(sql_close);
 
-	AMX_DECLARE_NATIVE(mysql_unprocessed_queries);
-	AMX_DECLARE_NATIVE(mysql_global_options);
+	AMX_DECLARE_NATIVE(sql_unprocessed_queries);
+	AMX_DECLARE_NATIVE(sql_global_options);
 
-	AMX_DECLARE_NATIVE(mysql_init_options);
-	AMX_DECLARE_NATIVE(mysql_set_option);
+	AMX_DECLARE_NATIVE(sql_init_options);
+	AMX_DECLARE_NATIVE(sql_set_option);
 
-	AMX_DECLARE_NATIVE(mysql_pquery);
-	AMX_DECLARE_NATIVE(mysql_tquery);
-	AMX_DECLARE_NATIVE(mysql_query);
-	AMX_DECLARE_NATIVE(mysql_tquery_file);
-	AMX_DECLARE_NATIVE(mysql_query_file);
+	AMX_DECLARE_NATIVE(sql_pquery);
+	AMX_DECLARE_NATIVE(sql_tquery);
+	AMX_DECLARE_NATIVE(sql_query);
+	AMX_DECLARE_NATIVE(sql_tquery_file);
+	AMX_DECLARE_NATIVE(sql_query_file);
 
-	AMX_DECLARE_NATIVE(mysql_errno);
-	AMX_DECLARE_NATIVE(mysql_error);
-	AMX_DECLARE_NATIVE(mysql_escape_string);
-	AMX_DECLARE_NATIVE(mysql_format);
-	AMX_DECLARE_NATIVE(mysql_set_charset);
-	AMX_DECLARE_NATIVE(mysql_get_charset);
-	AMX_DECLARE_NATIVE(mysql_stat);
-
+	AMX_DECLARE_NATIVE(sql_errno);
+	AMX_DECLARE_NATIVE(sql_error);
+	AMX_DECLARE_NATIVE(sql_escape_string);
+	AMX_DECLARE_NATIVE(sql_format);
+	AMX_DECLARE_NATIVE(sql_set_charset);
+	AMX_DECLARE_NATIVE(sql_get_charset);
+	AMX_DECLARE_NATIVE(sql_stat);
 
 	//Cache natives
 	AMX_DECLARE_NATIVE(cache_get_row_count);

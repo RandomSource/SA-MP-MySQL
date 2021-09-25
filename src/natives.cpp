@@ -13,7 +13,7 @@
 #include <fmt/printf.h>
 
 
-// native ORM:orm_create(const table[], MySQL:handle = MYSQL_DEFAULT_HANDLE);
+// native ORM:orm_create(const table[], MySQL:handle = sql_DEFAULT_HANDLE);
 AMX_DECLARE_NATIVE(Native::orm_create)
 {
 	CScopedDebugInfo dbg_info(amx, "orm_create", params, "sd");
@@ -410,11 +410,11 @@ AMX_DECLARE_NATIVE(Native::orm_setkey)
 
 
 
-// native MySQL:mysql_connect(const host[], const user[], const password[],
+// native MySQL:sql_connect(const host[], const user[], const password[],
 //							  const database[], MySQLOpt:option_id = MySQLOpt:0);
-AMX_DECLARE_NATIVE(Native::mysql_connect)
+AMX_DECLARE_NATIVE(Native::sql_connect)
 {
-	CScopedDebugInfo dbg_info(amx, "mysql_connect", params, "ss*sd");
+	CScopedDebugInfo dbg_info(amx, "sql_connect", params, "ss*sd");
 	OptionsId_t options_id = static_cast<OptionsId_t>(params[5]);
 	auto *options = COptionManager::Get()->GetOptionHandle(options_id);
 	if (options == nullptr)
@@ -453,10 +453,10 @@ AMX_DECLARE_NATIVE(Native::mysql_connect)
 	return ret_val;
 }
 
-// native MySQL:mysql_connect_file(const file_name[] = "mysql.ini");
-AMX_DECLARE_NATIVE(Native::mysql_connect_file)
+// native MySQL:sql_connect_file(const file_name[] = "mysql.ini");
+AMX_DECLARE_NATIVE(Native::sql_connect_file)
 {
-	CScopedDebugInfo dbg_info(amx, "mysql_connect_file", params, "s");
+	CScopedDebugInfo dbg_info(amx, "sql_connect_file", params, "s");
 	string file_name = amx_GetCppString(amx, params[1]);
 	//no directory seperators allowed
 	if (file_name.find_first_of("/\\") != string::npos)
@@ -483,10 +483,10 @@ AMX_DECLARE_NATIVE(Native::mysql_connect_file)
 	return ret_val;
 }
 
-// native mysql_close(MySQL:handle = MYSQL_DEFAULT_HANDLE);
-AMX_DECLARE_NATIVE(Native::mysql_close)
+// native sql_close(MySQL:handle = sql_DEFAULT_HANDLE);
+AMX_DECLARE_NATIVE(Native::sql_close)
 {
-	CScopedDebugInfo dbg_info(amx, "mysql_close", params, "d");
+	CScopedDebugInfo dbg_info(amx, "sql_close", params, "d");
 	const HandleId_t handle_id = static_cast<HandleId_t>(params[1]);
 	Handle_t handle = CHandleManager::Get()->GetHandle(handle_id);
 	if (handle == nullptr)
@@ -501,10 +501,10 @@ AMX_DECLARE_NATIVE(Native::mysql_close)
 	return ret_val;
 }
 
-// native mysql_unprocessed_queries(MySQL:handle = MYSQL_DEFAULT_HANDLE);
-AMX_DECLARE_NATIVE(Native::mysql_unprocessed_queries)
+// native sql_unprocessed_queries(MySQL:handle = sql_DEFAULT_HANDLE);
+AMX_DECLARE_NATIVE(Native::sql_unprocessed_queries)
 {
-	CScopedDebugInfo dbg_info(amx, "mysql_unprocessed_queries", params, "d");
+	CScopedDebugInfo dbg_info(amx, "sql_unprocessed_queries", params, "d");
 	const HandleId_t handle_id = static_cast<HandleId_t>(params[1]);
 	Handle_t handle = CHandleManager::Get()->GetHandle(handle_id);
 	if (handle == nullptr)
@@ -519,10 +519,10 @@ AMX_DECLARE_NATIVE(Native::mysql_unprocessed_queries)
 	return ret_val;
 }
 
-// native mysql_global_options(E_MYSQL_GLOBAL_OPTION:type, value);
-AMX_DECLARE_NATIVE(Native::mysql_global_options)
+// native sql_global_options(E_sql_GLOBAL_OPTION:type, value);
+AMX_DECLARE_NATIVE(Native::sql_global_options)
 {
-	CScopedDebugInfo dbg_info(amx, "mysql_global_options", params, "dd");
+	CScopedDebugInfo dbg_info(amx, "sql_global_options", params, "dd");
 	using OptEnum = COptionManager::GlobalOption;
 	OptEnum option = static_cast<OptEnum>(params[1]);
 	switch (option)
@@ -543,19 +543,19 @@ AMX_DECLARE_NATIVE(Native::mysql_global_options)
 	return 1;
 }
 
-// native MySQLOpt:mysql_init_options();
-AMX_DECLARE_NATIVE(Native::mysql_init_options)
+// native MySQLOpt:sql_init_options();
+AMX_DECLARE_NATIVE(Native::sql_init_options)
 {
-	CScopedDebugInfo dbg_info(amx, "mysql_init_options", params);
+	CScopedDebugInfo dbg_info(amx, "sql_init_options", params);
 	cell ret_val = COptionManager::Get()->Create();
 	CLog::Get()->LogNative(LogLevel::DEBUG, "return value: '{}'", ret_val);
 	return ret_val;
 }
 
-// native mysql_set_option(MySQLOpt:option_id, E_MYSQL_OPTION:type, ...);
-AMX_DECLARE_NATIVE(Native::mysql_set_option)
+// native sql_set_option(MySQLOpt:option_id, E_sql_OPTION:type, ...);
+AMX_DECLARE_NATIVE(Native::sql_set_option)
 {
-	CScopedDebugInfo dbg_info(amx, "mysql_set_option", params, "dd");
+	CScopedDebugInfo dbg_info(amx, "sql_set_option", params, "dd");
 	OptionsId_t options_id = static_cast<OptionsId_t>(params[1]);
 	auto *options = COptionManager::Get()->GetOptionHandle(options_id);
 	if (options == nullptr)
@@ -685,11 +685,11 @@ static bool SendQueryWithCallback(AMX *amx, cell *params,
 	return handle->Execute(query_type, query);
 }
 
-// native mysql_pquery(MySQL:handle, const query[], const callback[] = "",
+// native sql_pquery(MySQL:handle, const query[], const callback[] = "",
 //					   const format[] = "", {Float,_}:...);
-AMX_DECLARE_NATIVE(Native::mysql_pquery)
+AMX_DECLARE_NATIVE(Native::sql_pquery)
 {
-	CScopedDebugInfo dbg_info(amx, "mysql_pquery", params, "dsss");
+	CScopedDebugInfo dbg_info(amx, "sql_pquery", params, "dsss");
 
 	cell ret_val = SendQueryWithCallback(
 		amx, params, CHandle::ExecutionType::PARALLEL) ? 1 : 0;
@@ -698,11 +698,11 @@ AMX_DECLARE_NATIVE(Native::mysql_pquery)
 	return ret_val;
 }
 
-// native mysql_tquery(MySQL:handle, const query[], const callback[] = "",
+// native sql_tquery(MySQL:handle, const query[], const callback[] = "",
 //					   const format[] = "", {Float,_}:...);
-AMX_DECLARE_NATIVE(Native::mysql_tquery)
+AMX_DECLARE_NATIVE(Native::sql_tquery)
 {
-	CScopedDebugInfo dbg_info(amx, "mysql_tquery", params, "dsss");
+	CScopedDebugInfo dbg_info(amx, "sql_tquery", params, "dsss");
 
 	cell ret_val = SendQueryWithCallback(
 		amx, params, CHandle::ExecutionType::THREADED) ? 1 : 0;
@@ -711,10 +711,10 @@ AMX_DECLARE_NATIVE(Native::mysql_tquery)
 	return ret_val;
 }
 
-// native Cache:mysql_query(MySQL:handle, const query[], bool:use_cache = true);
-AMX_DECLARE_NATIVE(Native::mysql_query)
+// native Cache:sql_query(MySQL:handle, const query[], bool:use_cache = true);
+AMX_DECLARE_NATIVE(Native::sql_query)
 {
-	CScopedDebugInfo dbg_info(amx, "mysql_query", params, "dsd");
+	CScopedDebugInfo dbg_info(amx, "sql_query", params, "dsd");
 	const HandleId_t handle_id = static_cast<HandleId_t>(params[1]);
 	Handle_t handle = CHandleManager::Get()->GetHandle(handle_id);
 
@@ -786,12 +786,12 @@ bool ParseQueriesFromFile(const string &filepath, vector<string> &queries)
 	return true;
 }
 
-// native mysql_tquery_file(MySQL:handle,
+// native sql_tquery_file(MySQL:handle,
 //							const file_path[], const callback[] = "",
 //							const format[] = "", {Float,_}:...);
-AMX_DECLARE_NATIVE(Native::mysql_tquery_file)
+AMX_DECLARE_NATIVE(Native::sql_tquery_file)
 {
-	CScopedDebugInfo dbg_info(amx, "mysql_tquery_file", params, "dsss");
+	CScopedDebugInfo dbg_info(amx, "sql_tquery_file", params, "dsss");
 	const HandleId_t handle_id = static_cast<HandleId_t>(params[1]);
 	Handle_t handle = CHandleManager::Get()->GetHandle(handle_id);
 
@@ -901,11 +901,11 @@ AMX_DECLARE_NATIVE(Native::mysql_tquery_file)
 	return 1;
 }
 
-// native Cache:mysql_query_file(MySQL:handle,
+// native Cache:sql_query_file(MySQL:handle,
 //								 const file_path[], bool:use_cache = false);
-AMX_DECLARE_NATIVE(Native::mysql_query_file)
+AMX_DECLARE_NATIVE(Native::sql_query_file)
 {
-	CScopedDebugInfo dbg_info(amx, "mysql_query_file", params, "dsd");
+	CScopedDebugInfo dbg_info(amx, "sql_query_file", params, "dsd");
 	const HandleId_t handle_id = static_cast<HandleId_t>(params[1]);
 	Handle_t handle = CHandleManager::Get()->GetHandle(handle_id);
 
@@ -964,10 +964,10 @@ AMX_DECLARE_NATIVE(Native::mysql_query_file)
 	return ret_val;
 }
 
-// native mysql_errno(MySQL:handle = MYSQL_DEFAULT_HANDLE);
-AMX_DECLARE_NATIVE(Native::mysql_errno)
+// native sql_errno(MySQL:handle = sql_DEFAULT_HANDLE);
+AMX_DECLARE_NATIVE(Native::sql_errno)
 {
-	CScopedDebugInfo dbg_info(amx, "mysql_errno", params, "d");
+	CScopedDebugInfo dbg_info(amx, "sql_errno", params, "d");
 	const HandleId_t handle_id = static_cast<HandleId_t>(params[1]);
 	Handle_t handle = CHandleManager::Get()->GetHandle(handle_id);
 	if (handle == nullptr)
@@ -986,11 +986,11 @@ AMX_DECLARE_NATIVE(Native::mysql_errno)
 	return ret_val;
 }
 
-//native mysql_error(destination[], max_len = sizeof(destination),
-//					 MySQL:handle = MYSQL_DEFAULT_HANDLE);
-AMX_DECLARE_NATIVE(Native::mysql_error)
+//native sql_error(destination[], max_len = sizeof(destination),
+//					 MySQL:handle = sql_DEFAULT_HANDLE);
+AMX_DECLARE_NATIVE(Native::sql_error)
 {
-	CScopedDebugInfo dbg_info(amx, "mysql_error", params, "rdd");
+	CScopedDebugInfo dbg_info(amx, "sql_error", params, "rdd");
 	const HandleId_t handle_id = static_cast<HandleId_t>(params[3]);
 	Handle_t handle = CHandleManager::Get()->GetHandle(handle_id);
 	if (handle == nullptr)
@@ -1010,12 +1010,12 @@ AMX_DECLARE_NATIVE(Native::mysql_error)
 	return 1;
 }
 
-// native mysql_escape_string(const source[], destination[],
+// native sql_escape_string(const source[], destination[],
 //							  max_len = sizeof(destination),
-//							  MySQL:handle = MYSQL_DEFAULT_HANDLE);
-AMX_DECLARE_NATIVE(Native::mysql_escape_string)
+//							  MySQL:handle = sql_DEFAULT_HANDLE);
+AMX_DECLARE_NATIVE(Native::sql_escape_string)
 {
-	CScopedDebugInfo dbg_info(amx, "mysql_escape_string", params, "srdd");
+	CScopedDebugInfo dbg_info(amx, "sql_escape_string", params, "srdd");
 	const HandleId_t handle_id = static_cast<HandleId_t>(params[4]);
 	Handle_t handle = CHandleManager::Get()->GetHandle(handle_id);
 	if (handle == nullptr)
@@ -1054,11 +1054,11 @@ AMX_DECLARE_NATIVE(Native::mysql_escape_string)
 	return ret_val;
 }
 
-// native mysql_format(MySQL:handle, output[], len,
+// native sql_format(MySQL:handle, output[], len,
 //					   const format[], {Float,_}:...);
-AMX_DECLARE_NATIVE(Native::mysql_format)
+AMX_DECLARE_NATIVE(Native::sql_format)
 {
-	CScopedDebugInfo dbg_info(amx, "mysql_format", params, "drds");
+	CScopedDebugInfo dbg_info(amx, "sql_format", params, "drds");
 	const HandleId_t handle_id = static_cast<HandleId_t>(params[1]);
 	Handle_t handle = CHandleManager::Get()->GetHandle(handle_id);
 	if (handle == nullptr)
@@ -1212,10 +1212,10 @@ AMX_DECLARE_NATIVE(Native::mysql_format)
 	return ret_val;
 }
 
-// native mysql_set_charset(const charset[], MySQL:handle = MYSQL_DEFAULT_HANDLE);
-AMX_DECLARE_NATIVE(Native::mysql_set_charset)
+// native sql_set_charset(const charset[], MySQL:handle = sql_DEFAULT_HANDLE);
+AMX_DECLARE_NATIVE(Native::sql_set_charset)
 {
-	CScopedDebugInfo dbg_info(amx, "mysql_set_charset", params, "sd");
+	CScopedDebugInfo dbg_info(amx, "sql_set_charset", params, "sd");
 	const HandleId_t handle_id = static_cast<HandleId_t>(params[2]);
 	Handle_t handle = CHandleManager::Get()->GetHandle(handle_id);
 	if (handle == nullptr)
@@ -1231,11 +1231,11 @@ AMX_DECLARE_NATIVE(Native::mysql_set_charset)
 	return ret_val;
 }
 
-// native mysql_get_charset(destination[], max_len = sizeof(destination),
-//							MySQL:handle = MYSQL_DEFAULT_HANDLE);
-AMX_DECLARE_NATIVE(Native::mysql_get_charset)
+// native sql_get_charset(destination[], max_len = sizeof(destination),
+//							MySQL:handle = sql_DEFAULT_HANDLE);
+AMX_DECLARE_NATIVE(Native::sql_get_charset)
 {
-	CScopedDebugInfo dbg_info(amx, "mysql_get_charset", params, "rdd");
+	CScopedDebugInfo dbg_info(amx, "sql_get_charset", params, "rdd");
 	const HandleId_t handle_id = static_cast<HandleId_t>(params[3]);
 	Handle_t handle = CHandleManager::Get()->GetHandle(handle_id);
 	if (handle == nullptr)
@@ -1267,11 +1267,11 @@ AMX_DECLARE_NATIVE(Native::mysql_get_charset)
 	return 1;
 }
 
-// native mysql_stat(destination[], max_len = sizeof(destination),
-//					 MySQL:handle = MYSQL_DEFAULT_HANDLE);
-AMX_DECLARE_NATIVE(Native::mysql_stat)
+// native sql_stat(destination[], max_len = sizeof(destination),
+//					 MySQL:handle = sql_DEFAULT_HANDLE);
+AMX_DECLARE_NATIVE(Native::sql_stat)
 {
-	CScopedDebugInfo dbg_info(amx, "mysql_stat", params, "rdd");
+	CScopedDebugInfo dbg_info(amx, "sql_stat", params, "rdd");
 	const HandleId_t handle_id = static_cast<HandleId_t>(params[3]);
 	Handle_t handle = CHandleManager::Get()->GetHandle(handle_id);
 	if (handle == nullptr)
@@ -1425,7 +1425,7 @@ AMX_DECLARE_NATIVE(Native::cache_get_field_name)
 	return 1;
 }
 
-// native E_MYSQL_FIELD_TYPE:cache_get_field_type(field_index);
+// native E_sql_FIELD_TYPE:cache_get_field_type(field_index);
 AMX_DECLARE_NATIVE(Native::cache_get_field_type)
 {
 	CScopedDebugInfo dbg_info(amx, "cache_get_field_type", params, "d");
